@@ -1,0 +1,17 @@
+import API from "../axios/api";
+const all = ({driverId, busId, stdId, startTime, endTime,id}) => {
+    const temp = []
+    if(id !== undefined) temp.push(`id=${id}`)
+    if (busId !== undefined) temp.push(`bus_id=${busId}`)
+    if (driverId !== undefined) temp.push(`driver_id=${driverId}`)
+    if (stdId !== undefined) temp.push(`std_id=${stdId}`)
+    if (startTime !== undefined) temp.push(`start_time=${startTime}`)
+    if (endTime !== undefined) temp.push(`end_time=${endTime}`)
+    return temp
+}
+const ticket = new API('ticket',{
+    getCondition: all,
+    editCondition: all,
+    deleteCondition: all
+});
+export default ticket;
