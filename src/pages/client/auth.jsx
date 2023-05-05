@@ -4,7 +4,7 @@ import {useState, useEffect, useContext} from "react";
 import studentData from "../../data/student";
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
-import {UserContext} from "../../../context/UserContext.js";
+import {UserContext} from "../../context/UserContext.js";
 
 
 

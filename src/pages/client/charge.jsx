@@ -1,6 +1,6 @@
 import BG from "../../components/BG.jsx";
 import {useNavigate} from "react-router-dom";
-import {UserContext} from "../../../context/UserContext.js";
+import {UserContext} from "../../context/UserContext.js";
 import {useState, useEffect, useContext} from "react";
 import students from "../../data/student.js"
 import {TextInput, Button} from "flowbite-react";
