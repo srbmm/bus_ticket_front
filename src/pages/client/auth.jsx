@@ -5,6 +5,7 @@ import studentData from "../../data/student";
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
 import {UserContext} from "../../context/UserContext.js";
+import Loading from "../../components/Loading.jsx";
 
 
 
@@ -91,7 +92,7 @@ const Auth = () => {
     } else {
         if (Object.keys(student).length && !isLogin) {
             if (!request) auth(student.username, student.password)
-            return <div>Loading...</div>
+            return <Loading />
         } else return (
             <div className="flex h-screen items-center justify-center">
                 <BG/>

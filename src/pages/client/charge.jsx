@@ -5,6 +5,7 @@ import {useState, useEffect, useContext} from "react";
 import students from "../../data/student.js"
 import {TextInput, Button} from "flowbite-react";
 import {toast} from "react-toastify";
+import Loading from "../../components/Loading.jsx";
 
 const Charge = () => {
     const {student} = useContext(UserContext);
@@ -80,7 +81,7 @@ const Charge = () => {
         students.login(student.username, student.password).then(res => setIsLogin(true)).catch(() => {
             navigate("/client");
         })
-        return (<div>Loading...</div>)
+        return (<Loading />)
     }
 };
 

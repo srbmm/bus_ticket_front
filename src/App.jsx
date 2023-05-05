@@ -11,6 +11,7 @@ import Client from "./pages/client/auth";
 import ClientCharge from "./pages/client/charge";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import Students from "./pages/admin/students.jsx";
 
 const router = createBrowserRouter([
     {
@@ -22,13 +23,17 @@ const router = createBrowserRouter([
         element: <Admin/>,
     },
     {
+        path: "/admin/students",
+        element: <Students />,
+    },
+    {
         path: "/client",
         element: <Client/>,
     },
     {
         path: "/charge",
         element: <ClientCharge/>,
-    },
+    }
 ]);
 let temp = window.localStorage.getItem('student');
 if (temp) {
