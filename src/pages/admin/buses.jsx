@@ -1,10 +1,11 @@
 import useAdminLogin from "../../hooks/useAdminLogin.jsx";
 import Loading from "../../components/Loading.jsx";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import BG from "../../components/BG.jsx";
 import {Button} from "flowbite-react";
+import {Link} from "react-router-dom";
 
-const Students = () => {
+const Buses = () => {
     const navigate = useNavigate()
     const [isLogin, isLoad]= useAdminLogin()
     console.log(isLoad, isLogin)
@@ -30,4 +31,4 @@ const Students = () => {
 
 };
 
-export default Students;
+export default Buses;

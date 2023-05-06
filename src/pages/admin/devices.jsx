@@ -4,7 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import BG from "../../components/BG.jsx";
 import {Button} from "flowbite-react";
 
-const Students = () => {
+const Devices = () => {
     const navigate = useNavigate()
     const [isLogin, isLoad]= useAdminLogin()
     console.log(isLoad, isLogin)
@@ -30,4 +30,4 @@ const Students = () => {
 
 };
 
-export default Students;
+export default Devices;

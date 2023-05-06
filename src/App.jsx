@@ -12,6 +12,9 @@ import ClientCharge from "./pages/client/charge";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Students from "./pages/admin/students.jsx";
+import Devices from "./pages/admin/devices.jsx";
+import Buses from "./pages/admin/buses.jsx";
+import Stations from "./pages/admin/stations.jsx";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +28,18 @@ const router = createBrowserRouter([
     {
         path: "/admin/students",
         element: <Students />,
+    },
+    {
+        path: "/admin/buses",
+        element: <Buses />,
+    },
+    {
+        path: "/admin/devices",
+        element: <Devices />,
+    },
+    {
+        path: "/admin/stations",
+        element: <Stations />,
     },
     {
         path: "/client",

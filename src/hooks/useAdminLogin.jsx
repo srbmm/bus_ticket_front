@@ -7,7 +7,7 @@ const useAdminLogin = () => {
     const [isLogin, setIsLogin] = useState(false)
     const [isLoad, setIsLoad] = useState(false)
     useEffect(() => {
-        if (Object.keys(admin).length){
+        if (!Object.keys(admin).length){
             setIsLoad(true)
         }else{
             adminData.login(admin.username, admin.password).then(()=> setIsLogin(true)).finally(()=> setIsLoad(true))

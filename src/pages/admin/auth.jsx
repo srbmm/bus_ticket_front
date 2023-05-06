@@ -1,56 +1,76 @@
-import {Button, Label, TextInput} from "flowbite-react";
+import {Alert, Button, Label, TextInput} from "flowbite-react";
 import BG from "../../components/BG.jsx";
-import {useState} from "react";
-import admin from "../../data/admin"
+import {useState, useEffect, useContext} from "react";
+import adminData from "../../data/admin";
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
-const temp = window.localStorage.getItem('admin');
+import {UserContext} from "../../context/UserContext.js";
+import Loading from "../../components/Loading.jsx";
+
+
 const Auth = () => {
-    const [localStorage, setLocalStorage] = useState(temp);
+    const {admin, setAdmin} = useContext(UserContext)
     const [isLogin, setIsLogin] = useState(false);
+    const [data, setData] = useState(undefined);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [request, setRequest] = useState(false)
+    useEffect(() => {
+        if (isLogin) {
+            adminData.get({stdNumber: admin.username}).then(({data}) => {
+                setData(data[0])
+            })
+        }
+    }, [isLogin]);
+
     function auth(username, password, isToast) {
-        admin.login(username, password).then(({data}) => {
-            window.localStorage.setItem('admin', JSON.stringify({username,password}))
-            setLocalStorage({username, password})
-            setIsLogin(data)
-            if(isToast) toast.success('با موفقیت وارد شدید.', {
-                position: "bottom-right",
-                autoClose: 4000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-        }).catch((error) => {
-            console.log(error);
-            console.log('removed')
-            window.localStorage.removeItem("admin");
-            if(isToast) toast.error('خطا! لطفا اطلاعات را با دقت وارد نمایید.', {
-                position: "bottom-right",
-                autoClose: 4000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-            setIsLogin(false);
-        })
+        if (!request) {
+            adminData.login(username, password).then(({data}) => {
+                window.localStorage.setItem('admin', JSON.stringify({username, password}));
+                console.log(admin)
+                setAdmin({username, password});
+                setIsLogin(true);
+                if (isToast) toast.success('با موفقیت وارد شدید.', {
+                    position: "bottom-right",
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                setRequest(false)
+            }).catch((error) => {
+                console.log(error);
+                window.localStorage.removeItem("admin");
+                setAdmin({});
+                if (isToast) toast.error('خطا! لطفا اطلاعات را با دقت وارد نمایید.', {
+                    position: "bottom-right",
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                setIsLogin(false);
+                setRequest(false)
+            })
+        }
+        setRequest(true)
     }
-    if (isLogin){
-        return (<div>
-            <BG />
-            <div className="m-2 z-10">
-                <div className="flex">
+
+    if (isLogin) {
+        return (<div className="flex justify-center gap-2 flex-wrap pr-96 pl-96">
+            <BG/>
+            <div className="z-10 m-2">
+                <div className="flex gap-1 m-2">
                     <Button color="failure" className="w-96" onClick={(e) => {
+                        window.localStorage.removeItem('admin');
+                        setAdmin({})
                         setIsLogin(false)
-                        setLocalStorage(undefined)
-                        window.localStorage.removeItem('student')
                     }}>خروج</Button>
                     <Button>
                         <Link to="/" className="w-96">
@@ -58,20 +78,42 @@ const Auth = () => {
                         </Link>
                     </Button>
                 </div>
-                <div>
-
+                <div className="m-2 flex gap-2 flex-col">
+                    <Alert color="success" className="rtl">
+                      <span>
+                          {data?.name} به پنل مدیریت خوش آمدید.
+                      </span>
+                    </Alert>
+                    <Button color="dark" className="w-full">
+                        <Link color="dark" to="students" className="w-full">
+                            مدیریت کاربران
+                        </Link>
+                    </Button>
+                    <Button color="dark" className="w-full">
+                        <Link to="buses" className="w-full">
+                            مدیریت اتوبوس ها
+                        </Link>
+                    </Button>
+                    <Button color="dark" className="w-full">
+                        <Link to="devices" className="w-full">
+                            مدیریت دستگاه ها
+                        </Link>
+                    </Button>
+                    <Button color="dark" className="w-full">
+                        <Link to="stations" className="w-full">
+                            مدیریت ایستگاه ها
+                        </Link>
+                    </Button>
                 </div>
             </div>
         </div>)
-    }else {
-        if(localStorage) {
-            const {username, password} = JSON.parse(localStorage)
-            auth(username, password)
-            return <div></div>
-        }
-        else return (
+    } else {
+        if (Object.keys(admin).length && !isLogin) {
+            if (!request) auth(admin.username, admin.password)
+            return <Loading/>
+        } else return (
             <div className="flex h-screen items-center justify-center">
-                <BG />
+                <BG/>
                 <form className="flex flex-col gap-4 w-96 z-20 text-right rtl" onSubmit={e => {
                     e.preventDefault();
                     auth(username, password, true)
@@ -81,7 +123,7 @@ const Auth = () => {
                             <Label
                                 className="text-white"
                                 htmlFor="std"
-                                value="نام کاربری"
+                                value="شماره دانشجویی"
                             />
                         </div>
                         <TextInput

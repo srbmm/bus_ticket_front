@@ -7,8 +7,10 @@ class API{
         this.editCondition = editCondition;
         this.removeCondition = removeCondition;
     }
-    get(condition){
+    get(condition, page, count = 10, orderBy="", reverse="ASC"){
         condition = this.getCondition(condition).join("&")
+        if (page) condition += "&page=" + String(page) + "&count=" + String(count)
+        if (orderBy) condition += "&order_by=" + String(orderBy) + "&count=" + String(reverse)
         if (condition) condition = '?' + condition
         return myAxios.get(this.address + condition)
     }
@@ -39,4 +41,4 @@ class API{
     }
 }
 
-export default API
+export default API;
