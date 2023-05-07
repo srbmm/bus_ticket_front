@@ -6,15 +6,16 @@ import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
 import {UserContext} from "../../context/UserContext.js";
 import Loading from "../../components/Loading.jsx";
+import useAdminLogin from "../../hooks/useAdminLogin.jsx";
 
 
 const Auth = () => {
-    const {admin, setAdmin} = useContext(UserContext)
+    const {admin, setAdmin} = useContext(UserContext);
+    const [isAdminLogin, isLoad] = useAdminLogin()
     const [isLogin, setIsLogin] = useState(false);
     const [data, setData] = useState(undefined);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [request, setRequest] = useState(false)
     useEffect(() => {
         if (isLogin) {
             adminData.get({stdNumber: admin.username}).then(({data}) => {
@@ -22,15 +23,19 @@ const Auth = () => {
             })
         }
     }, [isLogin]);
+    useEffect(() => {
+        if (isAdminLogin) {
+            setIsLogin(true)
+        }
+    }, [isAdminLogin, isLoad])
 
     function auth(username, password, isToast) {
-        if (!request) {
-            adminData.login(username, password).then(({data}) => {
-                window.localStorage.setItem('admin', JSON.stringify({username, password}));
-                console.log(admin)
-                setAdmin({username, password});
-                setIsLogin(true);
-                if (isToast) toast.success('با موفقیت وارد شدید.', {
+        adminData.login(username, password).then(({data}) => {
+            window.localStorage.setItem('admin', JSON.stringify({username, password}));
+            setAdmin({username, password});
+            setIsLogin(data);
+            if (isToast) {
+                if (data) toast.success('با موفقیت وارد شدید.', {
                     position: "bottom-right",
                     autoClose: 4000,
                     hideProgressBar: false,
@@ -40,12 +45,7 @@ const Auth = () => {
                     progress: undefined,
                     theme: "light",
                 });
-                setRequest(false)
-            }).catch((error) => {
-                console.log(error);
-                window.localStorage.removeItem("admin");
-                setAdmin({});
-                if (isToast) toast.error('خطا! لطفا اطلاعات را با دقت وارد نمایید.', {
+                else toast.error('خطا! لطفا اطلاعات را با دقت وارد نمایید.', {
                     position: "bottom-right",
                     autoClose: 4000,
                     hideProgressBar: false,
@@ -55,11 +55,24 @@ const Auth = () => {
                     progress: undefined,
                     theme: "light",
                 });
-                setIsLogin(false);
-                setRequest(false)
-            })
-        }
-        setRequest(true)
+            }
+        }).catch((error) => {
+            console.log(error);
+            window.localStorage.removeItem("admin");
+            setAdmin({});
+            if (isToast) toast.error('خطا! لطفا اطلاعات را با دقت وارد نمایید.', {
+                position: "bottom-right",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            setIsLogin(false);
+        })
+
     }
 
     if (isLogin) {
@@ -68,8 +81,8 @@ const Auth = () => {
             <div className="z-10 m-2">
                 <div className="flex gap-1 m-2">
                     <Button color="failure" className="w-96" onClick={(e) => {
-                        window.localStorage.removeItem('admin');
                         setAdmin({})
+                        window.localStorage.removeItem('admin');
                         setIsLogin(false)
                     }}>خروج</Button>
                     <Button>
@@ -108,8 +121,7 @@ const Auth = () => {
             </div>
         </div>)
     } else {
-        if (Object.keys(admin).length && !isLogin) {
-            if (!request) auth(admin.username, admin.password)
+        if (!isLoad) {
             return <Loading/>
         } else return (
             <div className="flex h-screen items-center justify-center">
@@ -153,6 +165,11 @@ const Auth = () => {
                     </div>
                     <Button color="dark" type="submit">
                         ورود به بخش مدیریت
+                    </Button>
+                    <Button>
+                        <Link to="/" className="w-96">
+                            بازگشت به خانه
+                        </Link>
                     </Button>
                 </form>
             </div>

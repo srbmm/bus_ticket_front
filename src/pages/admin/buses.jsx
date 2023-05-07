@@ -4,11 +4,14 @@ import {useNavigate} from "react-router-dom";
 import BG from "../../components/BG.jsx";
 import {Button} from "flowbite-react";
 import {Link} from "react-router-dom";
-
+import RenderData from "../../components/RenderData.jsx";
+import bus from "../../data/bus.js";
+const Card = ({data}) => {
+    return <div>{data.name}</div>
+}
 const Buses = () => {
     const navigate = useNavigate()
     const [isLogin, isLoad]= useAdminLogin()
-    console.log(isLoad, isLogin)
     if (isLoad){
         if (isLogin){
             return (
@@ -18,6 +21,7 @@ const Buses = () => {
                         <Button className="w-full">
                             <Link to="/admin">بازگشت به پنل ادمین</Link>
                         </Button>
+                        <RenderData column={bus} Card={Card}/>
                     </div>
                 </div>
             );

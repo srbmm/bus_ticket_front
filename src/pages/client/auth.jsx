@@ -1,75 +1,88 @@
 import {Badge, Button, Label, TextInput} from "flowbite-react";
 import BG from "../../components/BG.jsx";
 import {useState, useEffect, useContext} from "react";
-import studentData from "../../data/student";
+import adminData from "../../data/student";
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
 import {UserContext} from "../../context/UserContext.js";
 import Loading from "../../components/Loading.jsx";
-
+import useAdminLogin from "../../hooks/useAdminLogin.jsx";
 
 
 const Auth = () => {
-    const {student, setStudent} = useContext(UserContext)
+    const {student, setStudent} = useContext(UserContext);
+    const [isStudentLogin, isLoad] = useAdminLogin()
     const [isLogin, setIsLogin] = useState(false);
     const [data, setData] = useState(undefined);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [request, setRequest] = useState(false)
     useEffect(() => {
         if (isLogin) {
-            studentData.get({stdNumber: student.username}).then(({data}) => {
+            adminData.get({stdNumber: student.username}).then(({data}) => {
                 setData(data[0])
             })
         }
     }, [isLogin]);
-    function auth(username, password, isToast) {
-        if(!request) {
-            studentData.login(username, password).then(({data}) => {
-                window.localStorage.setItem('student', JSON.stringify({username, password}));
-                console.log(student)
-                setStudent({username, password});
-                setIsLogin(true);
-                if (isToast) toast.success('با موفقیت وارد شدید.', {
-                    position: "bottom-right",
-                    autoClose: 4000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
-                setRequest(false)
-            }).catch((error) => {
-                console.log(error);
-                window.localStorage.removeItem("student");
-                setStudent({});
-                if (isToast) toast.error('خطا! لطفا اطلاعات را با دقت وارد نمایید.', {
-                    position: "bottom-right",
-                    autoClose: 4000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
-                setIsLogin(false);
-                setRequest(false)
-            })
+    useEffect(() => {
+        if (isStudentLogin) {
+            setIsLogin(true)
         }
-        setRequest(true)
+    }, [isStudentLogin, isLoad])
+
+    function auth(username, password, isToast) {
+        adminData.login(username, password).then(({data}) => {
+            window.localStorage.setItem('student', JSON.stringify({username, password}));
+            setStudent({username, password});
+            setIsLogin(data);
+            if (isToast) {
+                if (data) toast.success('با موفقیت وارد شدید.', {
+                    position: "bottom-right",
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                else toast.error('خطا! لطفا اطلاعات را با دقت وارد نمایید.', {
+                    position: "bottom-right",
+                    autoClose: 4000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }
+        }).catch((error) => {
+            console.log(error);
+            window.localStorage.removeItem("student");
+            setStudent({});
+            if (isToast) toast.error('خطا! لطفا اطلاعات را با دقت وارد نمایید.', {
+                position: "bottom-right",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            setIsLogin(false);
+        })
+
     }
 
     if (isLogin) {
         return (<div className="flex justify-center gap-2 flex-wrap pr-96 pl-96">
-            <BG />
+            <BG/>
             <div className="z-10 m-2">
                 <div className="flex gap-1 m-2">
                     <Button color="failure" className="w-96" onClick={(e) => {
-                        window.localStorage.removeItem('student');
                         setStudent({})
+                        window.localStorage.removeItem('student');
                         setIsLogin(false)
                     }}>خروج</Button>
                     <Button>
@@ -90,9 +103,8 @@ const Auth = () => {
             </div>
         </div>)
     } else {
-        if (Object.keys(student).length && !isLogin) {
-            if (!request) auth(student.username, student.password)
-            return <Loading />
+        if (!isLoad) {
+            return <Loading/>
         } else return (
             <div className="flex h-screen items-center justify-center">
                 <BG/>
@@ -133,8 +145,13 @@ const Auth = () => {
                             }}
                         />
                     </div>
-                    <Button type="submit">
+                    <Button color="dark" type="submit">
                         ورود به بخش کاربری
+                    </Button>
+                    <Button>
+                        <Link to="/" className="w-96">
+                            بازگشت به خانه
+                        </Link>
                     </Button>
                 </form>
             </div>

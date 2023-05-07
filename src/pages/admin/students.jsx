@@ -3,6 +3,8 @@ import Loading from "../../components/Loading.jsx";
 import {Link, useNavigate} from "react-router-dom";
 import BG from "../../components/BG.jsx";
 import {Button} from "flowbite-react";
+import RenderData from "../../components/RenderData.jsx";
+import student from "../../data/student.js";
 
 const Students = () => {
     const navigate = useNavigate()
@@ -17,6 +19,7 @@ const Students = () => {
                         <Button className="w-full">
                             <Link to="/admin">بازگشت به پنل ادمین</Link>
                         </Button>
+                        <RenderData column={student} Card={({data}) => <div>{data.std_number}</div>} />
                     </div>
                 </div>
             );
