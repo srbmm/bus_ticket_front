@@ -10,7 +10,10 @@ const useAdminLogin = () => {
         if (!Object.keys(admin).length){
             setIsLoad(true)
         }else{
-            adminData.login(admin.username, admin.password).then(()=> setIsLogin(true)).finally(()=> setIsLoad(true))
+            adminData.login(admin.username, admin.password)
+                .then(({data})=> setIsLogin(data))
+                .catch(err => console.log(err))
+                .finally(()=> setIsLoad(true))
         }
     }, []);
 

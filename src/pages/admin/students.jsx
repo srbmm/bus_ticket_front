@@ -9,7 +9,6 @@ import student from "../../data/student.js";
 const Students = () => {
     const navigate = useNavigate()
     const [isLogin, isLoad]= useAdminLogin()
-    console.log(isLoad, isLogin)
     if (isLoad){
         if (isLogin){
             return (
@@ -34,3 +33,5 @@ const Students = () => {
 };
 
 export default Students;
+
+

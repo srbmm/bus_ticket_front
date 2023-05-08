@@ -1,24 +1,24 @@
 import {Badge, Button, Label, TextInput} from "flowbite-react";
 import BG from "../../components/BG.jsx";
 import {useState, useEffect, useContext} from "react";
-import adminData from "../../data/student";
+import studentData from "../../data/student";
 import {toast} from "react-toastify";
 import {Link} from "react-router-dom";
 import {UserContext} from "../../context/UserContext.js";
 import Loading from "../../components/Loading.jsx";
-import useAdminLogin from "../../hooks/useAdminLogin.jsx";
+import useStudentLogin from "../../hooks/useStudentLogin.jsx";
 
 
 const Auth = () => {
     const {student, setStudent} = useContext(UserContext);
-    const [isStudentLogin, isLoad] = useAdminLogin()
+    const [isStudentLogin, isLoad] = useStudentLogin()
     const [isLogin, setIsLogin] = useState(false);
     const [data, setData] = useState(undefined);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     useEffect(() => {
         if (isLogin) {
-            adminData.get({stdNumber: student.username}).then(({data}) => {
+            studentData.get({stdNumber: student.username}).then(({data}) => {
                 setData(data[0])
             })
         }
@@ -30,7 +30,7 @@ const Auth = () => {
     }, [isStudentLogin, isLoad])
 
     function auth(username, password, isToast) {
-        adminData.login(username, password).then(({data}) => {
+        studentData.login(username, password).then(({data}) => {
             window.localStorage.setItem('student', JSON.stringify({username, password}));
             setStudent({username, password});
             setIsLogin(data);

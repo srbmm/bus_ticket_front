@@ -135,7 +135,7 @@ const Auth = () => {
                             <Label
                                 className="text-white"
                                 htmlFor="std"
-                                value="شماره دانشجویی"
+                                value="نام کاربری"
                             />
                         </div>
                         <TextInput

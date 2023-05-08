@@ -1,22 +1,24 @@
-import {Button} from "flowbite-react";
-import {Link} from "react-router-dom";
+import Link from "../components/Link.jsx";
 import BG from "../components/BG.jsx";
 
 const Main = () => {
     return (
         <>
             <div className="flex justify-around h-screen items-center">
-               <BG />
-                <Button color="dark" className="z-10">
-                    <Link to="admin" className="text-2xl">
+                <BG/>
+                <div className="z-10 flex gap-6">
+                    <Link to="admin" className="text-2xl" type="dark">
+                        <label className="text-2xl">
                         ورود مدیر
+                        </label>
                     </Link>
-                </Button>
-                <Button className="z-10">
-                    <Link to="client" className="text-2xl">
-                        ورود کاربر
+                    <Link to="client" >
+                        <label className="text-2xl">
+                            ورود کاربر
+                        </label>
                     </Link>
-                </Button>
+                </div>
+
             </div>
         </>
 

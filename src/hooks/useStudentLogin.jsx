@@ -9,7 +9,11 @@ const useStudentLogin = () => {
     useEffect(() => {
         if (!Object.keys(student).length){
             setIsLoad(true)
-        }else{ studentData.login(student.username, student.password).then(()=> setIsLogin(true)).finally(()=> setIsLoad(true))
+        }else{
+            studentData.login(student.username, student.password)
+                .then(({data})=> setIsLogin(data))
+                .catch(err => console.log(err))
+                .finally(()=> setIsLoad(true))
         }
     }, []);
 

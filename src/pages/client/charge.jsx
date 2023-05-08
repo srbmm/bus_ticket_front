@@ -49,8 +49,8 @@ const Charge = () => {
                                 theme: "light",
                             });
                         }else {
-                            students.editOne(data.std_id, data).then(() => {
-                                toast.success(`مقدار ${value} با موفقیت شارژ شدید.`, {
+                            students.editOne(data.std_id, {balance: data.balance}).then(() => {
+                                toast.success(`مقدار ${value} با موفقیت شارژ شد.`, {
                                     position: "bottom-right",
                                     autoClose: 4000,
                                     hideProgressBar: false,

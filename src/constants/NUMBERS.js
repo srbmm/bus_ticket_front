@@ -1,0 +1,1 @@
+export const NUMBERS_IN_PAGE = 10;
