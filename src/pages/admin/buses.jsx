@@ -2,21 +2,23 @@ import useAdminLogin from "../../hooks/useAdminLogin.jsx";
 import Loading from "../../components/Loading.jsx";
 import {useNavigate} from "react-router-dom";
 import BG from "../../components/BG.jsx";
-import {Button, Card, Label, Select, TextInput, ToggleSwitch} from "flowbite-react";
+import {Button, Card, Select, TextInput, ToggleSwitch} from "flowbite-react";
 import {Link} from "react-router-dom";
 import RenderData from "../../components/RenderData.jsx";
 import bus from "../../data/bus.js";
 import {useState} from "react";
 const MyCard = ({data, update}) => {
     const [change, setChange] = useState(data.is_active);
-    return (<Card className="w-96"><div><div className="flex gap-2">{data.name}<span><ToggleSwitch
+    return (<Card className="w-96"><div><div className="flex gap-2 items-center justify-between">{data.name}
+        <span><ToggleSwitch
         checked={change}
         label={change? "✔️": "❌"}
         onChange={(value) => {
             bus.editOne(data.bus_id, {is_active: value}).then(isOk => setChange(value))
             update()
         }}
-    /></span></div></div></Card>)
+    />
+    </span></div></div></Card>)
 }
 const Buses = () => {
     const navigate = useNavigate();

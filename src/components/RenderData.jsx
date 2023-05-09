@@ -10,34 +10,16 @@ const RenderData = ({column, Card, condition, name}) => {
     const updateData = () => {
         setToggle(!toggle)
     }
-    const [isOpenModal, setIsOpenModal] = useState(false);
     const [data, isLoad] = useLoadData(column.get(condition, page, NUMBERS_IN_PAGE), [page, condition, toggle])
     if (isLoad) {
         let render = []
-        if (data.countAll) render = data.query.map(item => <Card data={item} update={updateData}/>)
+        if (data.countAll) render = data.query.map(item => <Card data={item} update={updateData} className="basis-1/4"/>)
         return (
             <>
-                <Modal show={isOpenModal}>
-                    <Modal.Body>
-                        <div className="space-y-6 rtl">
-                            <h1>افزودن {name} جدید</h1>
-                            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                            تست ۱
-                            </p>
-                            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                            تست ۲
-                            </p>
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer className="rtl">
-                        <Button color="failure" onClick={() => {
-                            setIsOpenModal(false)
-                        }}>بستن</Button>
-                    </Modal.Footer>
-                    </Modal>
-                <div className="flex flex-col gap-2">
-                    <Button className="w-96" onClick={() => setIsOpenModal(true)}>افزودن {name}</Button>
-                    {...render}
+                <div className="flex flex-col items-center gap-2">
+                    <div className="flex flex-wrap gap-2 justify-center w-full">
+                        {...render}
+                    </div>
                     {data.countAll ? <Pagination
                         currentPage={page}
                         onPageChange={val => setPage(val)}
