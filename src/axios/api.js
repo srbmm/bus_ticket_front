@@ -24,8 +24,8 @@ class API{
         if (condition) condition = '?' + condition
         return myAxios.delete(this.address + condition)
     }
-    post(data){
-        return myAxios.post(data)
+    add(data){
+        return myAxios.post(this.address, data)
     }
     getOne(id){
         return myAxios.get(this.address + '/' + id)

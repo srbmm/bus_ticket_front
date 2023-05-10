@@ -1,10 +1,10 @@
 import {useState} from "react";
-import {Card, Pagination, Button, Modal} from "flowbite-react";
+import {Card, Pagination} from "flowbite-react";
 import useLoadData from "../hooks/useLoadData.jsx";
 import Loading from "./Loading.jsx";
 import {NUMBERS_IN_PAGE} from "../constants/NUMBERS.js";
 
-const RenderData = ({column, Card, condition, name}) => {
+const RenderData = ({column, Card, condition}) => {
     const [page, setPage] = useState(1);
     const [toggle, setToggle] = useState(false);
     const updateData = () => {

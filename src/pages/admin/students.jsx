@@ -6,15 +6,37 @@ import {Button, Card, Modal, TextInput} from "flowbite-react";
 import RenderData from "../../components/RenderData.jsx";
 import student from "../../data/student.js";
 import {useState} from "react";
+import Form from "../../components/Form.jsx"
+import {toast} from "react-toastify";
 
 const MyCard = ({data, update, className}) => {
     const [isModal, setIsModal] = useState(false);
     return (
         <>
             <Modal show={isModal} className="rtl">
-                <Modal.Footer className="flex gap-2">
+                <Modal.Footer className="flex flex-col gap-2">
+                    <Form inputs={[
+                        {name: "first_name", type: "text", defaultValue:data.first_name, placeholder: "نام"},
+                        {name: "last_name", type: "text", defaultValue:data.last_name, placeholder:  "نام خانوادگی"},
+                        {name: "std_number", type: "text", defaultValue:data.std_number, placeholder: "شماره دانشجویی"},
+                        {name: "password", type: "password", defaultValue: "", placeholder: "رمز عبور", required: false}
+                    ]} btn="ویرایش" onSubmit={(value) => {
+                        console.log(value)
+                        if (data.std_number == value.std_number) value.std_number = undefined
+                        if (!value.password) value.password = undefined
+                        student.editOne(data.std_id, value).then(({data}) => {
+                            if (data === "edited") {
+                                update();
+                                toast.success("با موفقیت ویرایش شد");
+                                setIsModal(false);
+                            } else {
+                                toast.error("مشکلی در ویرایش کردن است.")
+                            }
+                        }).catch(err => {
+                            toast.error("مشکلی در ویرایش کردن است.")
+                        })
+                    }} />
                     <Button color="failure" onClick={() => setIsModal(false)}>لغو</Button>
-                    <Button color="warning">ویرایش</Button>
                 </Modal.Footer>
             </Modal>
             <Card className={className}>
@@ -40,19 +62,31 @@ const Students = () => {
                     <Modal show={isOpenModal}>
                     <Modal.Body>
                         <div className="space-y-6 rtl">
-                            <h1>افزودن دانشجو جدید</h1>
-                            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                                تست ۱
-                            </p>
-                            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                                تست ۲
-                            </p>
+                            <Form inputs={[
+                                {name: "first_name", type: "text", defaultValue: "", placeholder: "نام"},
+                                {name: "last_name", type: "text", defaultValue: "", placeholder:  "نام خانوادگی"},
+                                {name: "std_number", type: "text", defaultValue: "", placeholder: "شماره دانشجویی"},
+                                {name: "password", type: "password", defaultValue: "", placeholder: "رمز عبور"}
+                            ]} btn="افزودن" onSubmit={(value) => {
+                                value.balance = 0
+                                student.add(value)
+                                    .then(({data}) => {
+                                        if (data){
+                                            setCondition({...condition})
+                                            toast.success("کاربر با موفقیت اضافه شد.")
+                                            setIsOpenModal(false)
+                                        }else{
+                                            toast.error("عملیات با خطا مواجه شد.")
+                                        }
+                                    }).catch(() => toast.error("عملیات با خطا مواجه شد."))
+                            }
+                            } />
                         </div>
                     </Modal.Body>
                     <Modal.Footer className="rtl">
                         <Button color="failure" onClick={() => {
                             setIsOpenModal(false)
-                        }}>بستن</Button>
+                        }}>لغو</Button>
                     </Modal.Footer>
                 </Modal>
                     <div className="flex h-screen w-screen justify-center">
