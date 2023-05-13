@@ -98,7 +98,7 @@ const Students = () => {
                     </Modal>
                     <div className="flex h-screen w-screen justify-center">
                         <BG/>
-                        <div className="z-10 flex flex-col gap-2 m-2 w-full p-8">
+                        <div className="z-10 flex flex-col gap-2 m-2 w-full p-4">
                             <Button className="w-full">
                                 <Link to="/admin">بازگشت به پنل ادمین</Link>
                             </Button>

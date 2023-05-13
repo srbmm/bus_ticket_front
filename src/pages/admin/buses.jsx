@@ -13,6 +13,7 @@ import Select from "react-select"
 import useLoadData from "../../hooks/useLoadData.jsx";
 import station from "../../data/station.js";
 import station_to_bus from "../../data/station_to_bus.js";
+import student from "../../data/student.js";
 
 const MyCard = ({data, update, className}) => {
     const [change, setChange] = useState(data.is_active);
@@ -31,20 +32,25 @@ const MyCard = ({data, update, className}) => {
         return (<>
             <Modal show={modal}>
                 <Modal.Body className="flex flex-col gap-2">
-                    <Select onChange={val => {
-                        if (selected.length > val.length){
-                            const dif = selected.find(itemSelect => val.find(itemVal => itemVal.value === itemSelect.value) === undefined)
-                            const item = stationChoice.find((item)=> item.station_id === dif.value)
-                            console.log(item)
-                            station_to_bus.deleteOne(item.stations_to_buses).then(({data}) => console.log(data))
-                        }else if (selected.length < val.length) {
-                            const dif = val.find(itemVal => selected.find(itemSelect => itemVal.value === itemSelect.value) === undefined)
-                        }
-                    }} defaultValue={selected} options={options}  isMulti />
+                    <Form inputs={[
+                        {name: "name", type: "text", defaultValue: data.name, placeholder: "نام اتوبوس"},
+                    ]} btn="ویرایش" onSubmit={(value) => {
+                        bus.editOne(data.bus_id, value).then(({data}) => {
+                            if (data === "edited") {
+                                update();
+                                toast.success("با موفقیت ویرایش شد");
+                                setIsModal(false);
+                            } else {
+                                toast.error("مشکلی در ویرایش کردن است.")
+                            }
+                        }).catch(err => {
+                            toast.error("مشکلی در ویرایش کردن است.")
+                        })
+                    }}/>
                 </Modal.Body>
                 <Modal.Footer><Button color="failure" onClick={() => setIsModal(false)}>لغو</Button></Modal.Footer></Modal>
             <Card className={className}>
-                <div>
+                <div className="flex flex-col gap-2">
                     <div className="flex gap-2 items-center justify-between">
                         <div>{data.name}</div>
                         <Button color="warning" onClick={() => setIsModal(true)}>ویرایش</Button>
@@ -58,6 +64,35 @@ const MyCard = ({data, update, className}) => {
                             }}
                         /></span>
                     </div>
+                    <Select onChange={val => {
+                        if (selected.length > val.length){
+                            const dif = selected.find(itemSelect => val.find(itemVal => itemVal.value === itemSelect.value) === undefined)
+                            const item = stationChoice.find((item)=> item.station_id === dif.value)
+                            station_to_bus.deleteOne(item.stations_to_buses).then(({data}) => {
+                                if (data === "deleted"){
+                                    toast.success("با موفقیت حذف شد")
+                                    update()
+                                }else {
+                                    toast.error("درخواست شما با مشکلی مواجه شده است")
+                                }
+                            }).catch(err => {
+                                toast.error("درخواست شما با مشکلی مواجه شده است")
+                            })
+                        }else if (selected.length < val.length) {
+                            const dif = val.find(itemVal => selected.find(itemSelect => itemVal.value === itemSelect.value) === undefined)
+                            station_to_bus.add({station_id: dif.value, bus_id: data.bus_id}).then(({data}) => {
+                                console.log({station_id: dif.value, bus_id: dif.value})
+                                if (data){
+                                    toast.success("ایستگاه با موفقیت اضافه شد")
+                                    update()
+                                }else {
+                                    toast.error("درخواست شما با مشکلی مواجه شده است")
+                                }
+                            }).catch(err => {
+                                toast.error("درخواست شما با مشکلی مواجه شده است")
+                            })
+                        }
+                    }} defaultValue={selected} options={options}  isMulti />
                 </div>
             </Card>
         </>)
