@@ -1,8 +1,8 @@
 import API from "../axios/api";
-const all = ({driverId, id}) => {
+const all = ({busId, id}) => {
     const temp = []
     if(id !== undefined) temp.push(`id=${id}`)
-    if (driverId !== undefined) temp.push(`driver_id=${driverId}`)
+    if (busId !== undefined) temp.push(`bus_id=${busId}`)
     return temp
 }
 const cardReader = new API('card_reader',{

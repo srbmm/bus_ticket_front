@@ -10,7 +10,7 @@ class API{
     get(condition, page, count = 10, orderBy="", reverse="ASC"){
         condition = this.getCondition(condition).join("&")
         if (page) condition += "&page=" + String(page) + "&count=" + String(count)
-        if (orderBy) condition += "&order_by=" + String(orderBy) + "&count=" + String(reverse)
+        if (orderBy) condition += "&order_by=" + String(orderBy) + "&reverse=" + String(reverse)
         if (condition) condition = '?' + condition
         return myAxios.get(this.address + condition)
     }

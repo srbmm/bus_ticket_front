@@ -17,7 +17,7 @@ const Charge = () => {
     const [value, setValue] = useState(0);
     useEffect(() => {
         if (isLogin) {
-            students.get({stdNumber: student.username}).then(({data}) => {
+            students.get({id: student.username}).then(({data}) => {
                 setData(data[0])
             })
         }
@@ -28,6 +28,7 @@ const Charge = () => {
                 <BG/>
                 <div className="z-10 flex">
                     <TextInput placeholder="مقدار" className="w-96" type="number" onChange={e => {
+                        console.log(e.target.value)
                         setValue(e.target.value)
                     }}/>
                     <Button color="success" onClick={e =>{

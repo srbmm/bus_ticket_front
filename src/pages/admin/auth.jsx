@@ -18,7 +18,7 @@ const Auth = () => {
     const [password, setPassword] = useState("");
     useEffect(() => {
         if (isLogin) {
-            adminData.get({stdNumber: admin.username}).then(({data}) => {
+            adminData.get({admin_id: admin.username}).then(({data}) => {
                 setData(data[0])
             })
         }

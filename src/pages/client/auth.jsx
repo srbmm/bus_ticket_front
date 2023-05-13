@@ -18,7 +18,7 @@ const Auth = () => {
     const [password, setPassword] = useState("");
     useEffect(() => {
         if (isLogin) {
-            studentData.get({stdNumber: student.username}).then(({data}) => {
+            studentData.get({id: student.username}).then(({data}) => {
                 setData(data[0])
             })
         }
@@ -95,7 +95,7 @@ const Auth = () => {
                     <Badge className="rtl" color="success">
                         <div className="flex gap-80 items-center">
                             <p className="text-lg">
-                                سلام{data?.first_name + ' ' + data?.last_name} موجودی حساب شما: {data?.balance} </p>
+                                سلام {data?.first_name + ' ' + data?.last_name} موجودی حساب شما: {data?.balance} </p>
                             <Button color="success"><Link to="/charge">شارژ حساب</Link></Button>
                         </div>
                     </Badge>
