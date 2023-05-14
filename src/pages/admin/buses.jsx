@@ -13,7 +13,6 @@ import Select from "react-select"
 import useLoadData from "../../hooks/useLoadData.jsx";
 import station from "../../data/station.js";
 import station_to_bus from "../../data/station_to_bus.js";
-import student from "../../data/student.js";
 
 const MyCard = ({data, update, className}) => {
     const [change, setChange] = useState(data.is_active);
@@ -23,7 +22,7 @@ const MyCard = ({data, update, className}) => {
     if (isLoadStations && isLoadStationChoice) {
         const selected = []
         const options = stations.map(station => {
-               const choice = {value: station.station_id, label: station.name}
+               const choice = {value: station.station_id, label: station.station_name}
                if (stationChoice.find(item => item.station_id === station.station_id)){
                    selected.push(choice)
                }
@@ -33,7 +32,7 @@ const MyCard = ({data, update, className}) => {
             <Modal show={modal}>
                 <Modal.Body className="flex flex-col gap-2">
                     <Form inputs={[
-                        {name: "name", type: "text", defaultValue: data.name, placeholder: "نام اتوبوس"},
+                        {name: "name", type: "text", defaultValue: data.bus_name, placeholder: "نام اتوبوس"},
                     ]} btn="ویرایش" onSubmit={(value) => {
                         bus.editOne(data.bus_id, value).then(({data}) => {
                             if (data === "edited") {
@@ -52,7 +51,7 @@ const MyCard = ({data, update, className}) => {
             <Card className={className}>
                 <div className="flex flex-col gap-2">
                     <div className="flex gap-2 items-center justify-between">
-                        <div>{data.name}</div>
+                        <div>{data.bus_name}</div>
                         <Button color="warning" onClick={() => setIsModal(true)}>ویرایش</Button>
                         <span><ToggleSwitch
                             className="ltr"
@@ -117,7 +116,7 @@ const Buses = () => {
                         <Modal.Body>
                             <div className="space-y-6 rtl">
                                 <Form inputs={[
-                                    {name: "name", type: "text", defaultValue: "", placeholder: "نام اتوبوس"},
+                                    {name: "bus_name", type: "text", defaultValue: "", placeholder: "نام اتوبوس"},
                                 ]} btn="افزودن" onSubmit={(value) => {
                                     value.is_active = false;
                                     bus.add(value)

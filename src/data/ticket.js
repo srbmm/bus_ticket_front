@@ -1,7 +1,9 @@
 import API from "../axios/api";
-const all = ({busId, stdId, startTime, endTime,id}) => {
+const all = ({busId, stdId, startTime, endTime,id, student=false, bus=false}) => {
     const temp = []
     if(id !== undefined) temp.push(`id=${id}`)
+    if(student) temp.push(`student=true`)
+    if(bus) temp.push(`bus=true`)
     if (busId !== undefined) temp.push(`bus_id=${busId}`)
     if (stdId !== undefined) temp.push(`std_id=${stdId}`)
     if (startTime !== undefined) temp.push(`start_time=${startTime}`)

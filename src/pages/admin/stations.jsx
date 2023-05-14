@@ -17,7 +17,7 @@ const MyCard = ({data, className, update}) => {
             <Modal show={modal} className="rtl">
                 <Modal.Body>
                     <Form inputs={[
-                        {name: "name", type: "text", defaultValue: data.name, placeholder: "نام ایستگاه"},
+                        {name: "name", type: "text", defaultValue: data.station_name, placeholder: "نام ایستگاه"},
                         {
                             name: "nearby_places",
                             type: "text",
@@ -44,7 +44,7 @@ const MyCard = ({data, className, update}) => {
             </Modal>
             <Card className={className}>
                 <div className="flex justify-between">
-                    {data.name} <Button color="warning" onClick={() => setIsModal(true)}>ویرایش</Button>
+                    {data.station_name} <Button color="warning" onClick={() => setIsModal(true)}>ویرایش</Button>
                 </div>
             </Card>
         </>
@@ -63,7 +63,7 @@ const Stations = () => {
                     <Modal show={isModal}>
                         <Modal.Body>
                             <Form inputs={[
-                                {name: "name", type: "text", defaultValue: "", placeholder: "نام ایستگاه"},
+                                {name: "station_name", type: "text", defaultValue: "", placeholder: "نام ایستگاه"},
                                 {name: "nearby_places", type: "text", defaultValue: "", placeholder: "مکان های نزدیک"},
                             ]} btn="افزودن" onSubmit={(value) => {
                                     station.add(value)

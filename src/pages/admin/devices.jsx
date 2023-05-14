@@ -13,10 +13,9 @@ import {toast} from "react-toastify";
 
 const MyCard = ({className, update, data}) => {
     const [modal, setModal] = useState(false)
-    const [busNameData, isLoadingBusName] = useLoadData(bus.getOne(data.bus_id), [])
     const [allBus, isLoadAll] = useLoadData(bus.get({}), [])
-    if (isLoadingBusName && isLoadAll) {
-        const choices = allBus.map(data => {return {value: data.bus_id, text: data.name}})
+    if (isLoadAll) {
+        const choices = allBus.map(data => {return {value: data.bus_id, text: data.bus_name}})
         return (<>
             <Modal show={modal} className="rtl">
                 <Modal.Body>
@@ -42,7 +41,7 @@ const MyCard = ({className, update, data}) => {
             <Card className={className}>
                 <div className="flex justify-between w-full items-center">
                     <div>{data.card_reader_id}</div>
-                    <div>{busNameData[0].name}</div>
+                    <div>{data.bus_name}</div>
                     <Button color="warning" onClick={() => setModal(true)}>ویرایش</Button>
                 </div>
                 <div>قیمت بلیط: {data.ticket_price}</div>
@@ -59,7 +58,7 @@ const Devices = () => {
     const [isLogin, isLoad] = useAdminLogin();
     const [editAllModal, setEditAllModal] = useState(false);
     const [addModal, setAddModal] = useState(false);
-    const [condition, setCondition] = useState({});
+    const [condition, setCondition] = useState({bus});
     if (isLoad && isLoadAll) {
         if (isLogin) {
             const choices = allBus.map(data => {return {value: data.bus_id, text: data.name}})
