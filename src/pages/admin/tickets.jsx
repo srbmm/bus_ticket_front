@@ -30,7 +30,7 @@ const Tickets = () => {
                 counter[item.bus_id].count += 1
             }
         })
-        setChartData(Object.values(counter))
+        setChartData(Object.values(counter).map(item => {return {name: `${item.name} (${item.count})`, count: item.count}}))
     },[data])
     useEffect(() => {
         student.get({}).then(({data}) => {
