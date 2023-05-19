@@ -15,6 +15,7 @@ import Students from "./pages/admin/students.jsx";
 import Devices from "./pages/admin/devices.jsx";
 import Buses from "./pages/admin/buses.jsx";
 import Stations from "./pages/admin/stations.jsx";
+import Tickets from "./pages/admin/tickets.jsx";
 
 const router = createBrowserRouter([
     {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
     {
         path: "/admin/stations",
         element: <Stations />,
+    },
+    {
+        path: "/admin/tickets",
+        element: <Tickets />,
     },
     {
         path: "/client",

@@ -117,6 +117,11 @@ const Auth = () => {
                             مدیریت ایستگاه ها
                         </Link>
                     </Button>
+                    <Button color="dark" className="w-full">
+                        <Link to="tickets" className="w-full">
+                            تاریخچه بلیط ها
+                        </Link>
+                    </Button>
                 </div>
             </div>
         </div>)

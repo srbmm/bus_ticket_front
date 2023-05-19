@@ -12,6 +12,7 @@ class API{
         if (page) condition += "&page=" + String(page) + "&count=" + String(count)
         if (orderBy) condition += "&order_by=" + String(orderBy) + "&reverse=" + String(reverse)
         if (condition) condition = '?' + condition
+        console.log(condition)
         return myAxios.get(this.address + condition)
     }
     edit(data,condition){

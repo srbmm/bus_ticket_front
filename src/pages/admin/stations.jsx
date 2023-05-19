@@ -8,7 +8,6 @@ import station from "../../data/station.js";
 import {useState} from "react";
 import Form from "../../components/Form.jsx";
 import {toast} from "react-toastify";
-import student from "../../data/student.js";
 
 const MyCard = ({data, className, update}) => {
     const [modal, setIsModal] = useState(false);
