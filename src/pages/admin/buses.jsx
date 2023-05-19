@@ -17,6 +17,7 @@ import station_to_bus from "../../data/station_to_bus.js";
 const MyCard = ({data, update, className}) => {
     const [change, setChange] = useState(data.is_active);
     const [modal, setIsModal] = useState(false);
+    const [isModalStation, setIsModalStation] = useState(false);
     const [stations, isLoadStations] = useLoadData(station.get({}), [])
     const [stationChoice, isLoadStationChoice] = useLoadData(station_to_bus.get({busId: data.bus_id}), [])
     if (isLoadStations && isLoadStationChoice) {
@@ -29,40 +30,8 @@ const MyCard = ({data, update, className}) => {
                return choice
             })
         return (<>
-            <Modal show={modal}>
-                <Modal.Body className="flex flex-col gap-2">
-                    <Form inputs={[
-                        {name: "name", type: "text", defaultValue: data.bus_name, placeholder: "نام اتوبوس"},
-                    ]} btn="ویرایش" onSubmit={(value) => {
-                        bus.editOne(data.bus_id, value).then(({data}) => {
-                            if (data === "edited") {
-                                update();
-                                toast.success("با موفقیت ویرایش شد");
-                                setIsModal(false);
-                            } else {
-                                toast.error("مشکلی در ویرایش کردن است.")
-                            }
-                        }).catch(err => {
-                            toast.error("مشکلی در ویرایش کردن است.")
-                        })
-                    }}/>
-                </Modal.Body>
-                <Modal.Footer><Button color="failure" onClick={() => setIsModal(false)}>لغو</Button></Modal.Footer></Modal>
-            <Card className={className}>
-                <div className="flex flex-col gap-2">
-                    <div className="flex gap-2 items-center justify-between">
-                        <div>{data.bus_name}</div>
-                        <Button color="warning" onClick={() => setIsModal(true)}>ویرایش</Button>
-                        <span><ToggleSwitch
-                            className="ltr"
-                            checked={change}
-                            label={change ? "✔️" : "❌"}
-                            onChange={(value) => {
-                                bus.editOne(data.bus_id, {is_active: value}).then(isOk => setChange(value))
-                                update()
-                            }}
-                        /></span>
-                    </div>
+            <Modal show={isModalStation}>
+                <Modal.Body>
                     <Select onChange={val => {
                         if (selected.length > val.length){
                             const dif = selected.find(itemSelect => val.find(itemVal => itemVal.value === itemSelect.value) === undefined)
@@ -92,6 +61,48 @@ const MyCard = ({data, update, className}) => {
                             })
                         }
                     }} defaultValue={selected} options={options}  isMulti />
+                </Modal.Body>
+                <Modal.Footer className="rtl">
+                    <Button color="failure" onClick={() => {
+                        setIsModalStation(false)
+                    }}>بستن</Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal show={modal}>
+                <Modal.Body className="flex flex-col gap-2">
+                    <Form inputs={[
+                        {name: "name", type: "text", defaultValue: data.bus_name, placeholder: "نام اتوبوس"},
+                    ]} btn="ویرایش" onSubmit={(value) => {
+                        bus.editOne(data.bus_id, value).then(({data}) => {
+                            if (data === "edited") {
+                                update();
+                                toast.success("با موفقیت ویرایش شد");
+                                setIsModal(false);
+                            } else {
+                                toast.error("مشکلی در ویرایش کردن است.")
+                            }
+                        }).catch(err => {
+                            toast.error("مشکلی در ویرایش کردن است.")
+                        })
+                    }}/>
+                </Modal.Body>
+                <Modal.Footer><Button color="failure" onClick={() => setIsModal(false)}>لغو</Button></Modal.Footer></Modal>
+            <Card className={className}>
+                <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 items-center justify-between">
+                        <div>{data.bus_name}</div>
+                        <Button color="warning" onClick={() => setIsModal(true)}>ویرایش اتوبوس</Button>
+                        <span><ToggleSwitch
+                            className="ltr"
+                            checked={change}
+                            label={change ? "✔️" : "❌"}
+                            onChange={(value) => {
+                                bus.editOne(data.bus_id, {is_active: value}).then(isOk => setChange(value))
+                                update()
+                            }}
+                        /></span>
+                    </div>
+                    <Button color="warning" onClick={() => setIsModalStation(true)}>ویرایش ایستگاه</Button>
                 </div>
             </Card>
         </>)
@@ -141,6 +152,7 @@ const Buses = () => {
                             }}>لغو</Button>
                         </Modal.Footer>
                     </Modal>
+
                     <div className="flex h-screen w-screen justify-center">
                         <BG/>
                         <div className="z-10 flex flex-col gap-2 m-2 w-full">
